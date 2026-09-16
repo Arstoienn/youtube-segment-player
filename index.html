@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>youtube-segment-player demo</title>
+  <meta name="description" content="Play start/end segments of long YouTube videos as a playlist." />
+
+  <link rel="stylesheet" href="src/css/clip-player.css" />
+  <style>
+    :root { color-scheme: dark; }
+
+    body {
+      margin: 0;
+      padding: 40px 24px 64px;
+      background: #121820;
+      color: var(--clip-text);
+      font-family: var(--clip-font);
+      line-height: 1.55;
+    }
+
+    .demo-wrap { max-width: 1120px; margin: 0 auto; }
+
+    .demo-wrap > h1 { margin: 0 0 4px; font-size: 32px; font-weight: 600; }
+
+    .demo-intro { margin: 0 0 28px; color: var(--clip-text-soft); }
+
+    .demo-note {
+      margin: 40px 0 0;
+      padding-top: 18px;
+      border-top: 1px solid var(--clip-hairline);
+      font-size: 13px;
+      color: var(--clip-text-faint);
+    }
+
+    .demo-note a { color: var(--clip-accent); }
+  </style>
+</head>
+
+<body>
+  <div class="demo-wrap">
+    <h1>youtube-segment-player</h1>
+    <p class="demo-intro">
+      Each entry plays one timestamped range of a longer film, then advances to the next.
+    </p>
+
+    <div id="player">
+      <section class="clip-player-shell">
+        <div class="clip-now">
+          <p class="clip-player-label">Now Playing</p>
+          <h2 class="clip-player-title" data-clip-now-title>Standby</h2>
+          <p class="clip-player-artist" data-clip-now-artist>Pick a clip to start</p>
+          <p class="clip-player-meta" data-clip-now-meta>Film · Release date</p>
+
+          <div class="clip-flow-indicator" data-clip-flow-indicator data-mode="auto" hidden>
+            <span class="clip-flow-icon" aria-hidden="true"></span>
+            <span class="clip-flow-text" data-clip-flow-text>Auto Next</span>
+          </div>
+
+          <div class="clip-transport">
+            <button type="button" class="clip-transport-button clip-transport-button--prev"
+                    data-clip-prev aria-label="Previous clip" disabled>
+              <span class="clip-transport-icon" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="clip-transport-button clip-transport-button--next"
+                    data-clip-next aria-label="Next clip" disabled>
+              <span class="clip-transport-icon" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="clip-transport-button clip-transport-button--shuffle"
+                    data-clip-shuffle aria-label="Shuffle" aria-pressed="false">
+              <span class="clip-transport-icon" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="clip-transport-button clip-transport-button--share"
+                    data-clip-share aria-label="Copy share link" disabled>
+              <span class="clip-transport-icon" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="clip-preview-panel">
+          <div class="clip-player-mount" data-clip-player-mount></div>
+          <img class="clip-player-poster" data-clip-player-poster alt="" hidden />
+        </div>
+      </section>
+
+      <section class="clip-library">
+        <div class="clip-library-head">
+          <div>
+            <h2>Open movies</h2>
+            <p>Open a film, then pick a scene.</p>
+          </div>
+          <div class="clip-search">
+            <input type="search" class="clip-search-input" data-clip-search
+                   placeholder="Search scenes and films…" aria-label="Search scenes and films"
+                   autocomplete="off" />
+          </div>
+        </div>
+
+        <div class="clip-tree" data-clip-tree></div>
+      </section>
+    </div>
+
+    <p class="demo-note">
+      Footage: Blender Foundation open movies,
+      <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.
+      Clip titles and timings are this demo's own.
+    </p>
+  </div>
+
+  <script src="src/js/config.js"></script>
+  <script src="src/js/archive.js"></script>
+  <script src="src/js/tree-view.js"></script>
+  <script src="src/js/playback.js"></script>
+  <script src="src/js/media-keys.js"></script>
+  <script src="src/js/player.js"></script>
+  <script>
+    ClipPlayer.mount({
+      el: "#player",
+      dataUrl: "data/",
+      defaultArtist: "Blender Foundation",
+      documentTitleSuffix: "youtube-segment-player",
+      strings: {
+        standbyArtist: "Pick a clip to start",
+        standbyMeta: "Film · Release date",
+      },
+    });
+  </script>
+</body>
+</html>

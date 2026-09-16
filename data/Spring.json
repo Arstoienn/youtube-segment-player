@@ -1,0 +1,21 @@
+{
+  "youtubeUrl": "https://www.youtube.com/watch?v=WhWc3b3KhnY",
+  "date": "2019.04.04",
+  "clips": [
+    {
+      "title": "Waking the valley",
+      "start": "0:40",
+      "end": "2:00"
+    },
+    {
+      "title": "The descent",
+      "start": "3:00",
+      "end": "4:20"
+    },
+    {
+      "title": "Spring arrives",
+      "start": "5:30",
+      "end": "7:00"
+    }
+  ]
+}

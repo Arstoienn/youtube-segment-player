@@ -1,0 +1,21 @@
+{
+  "youtubeUrl": "https://www.youtube.com/watch?v=Y-rmzh0PI3c",
+  "date": "2015.08.10",
+  "clips": [
+    {
+      "title": "The cliff",
+      "start": "0:50",
+      "end": "2:10"
+    },
+    {
+      "title": "The salesman",
+      "start": "3:00",
+      "end": "4:30"
+    },
+    {
+      "title": "A sheep of many lives",
+      "start": "6:00",
+      "end": "7:30"
+    }
+  ]
+}

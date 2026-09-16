@@ -1,0 +1,16 @@
+{
+  "youtubeUrl": "https://www.youtube.com/watch?v=SkVqJ1SGeL0",
+  "date": "2016.02.11",
+  "clips": [
+    {
+      "title": "The fence",
+      "start": "0:20",
+      "end": "1:00"
+    },
+    {
+      "title": "The standoff",
+      "start": "1:00",
+      "end": "1:50"
+    }
+  ]
+}

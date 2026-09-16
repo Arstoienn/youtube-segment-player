@@ -1,0 +1,26 @@
+{
+  "youtubeUrl": "https://www.youtube.com/watch?v=TLkA0RELQ1g",
+  "date": "2006.03.24",
+  "clips": [
+    {
+      "title": "The machine hall",
+      "start": "0:50",
+      "end": "2:20"
+    },
+    {
+      "title": "Walking the wires",
+      "start": "3:00",
+      "end": "4:20"
+    },
+    {
+      "title": "The switchboard",
+      "start": "5:30",
+      "end": "7:00"
+    },
+    {
+      "title": "Coming apart",
+      "start": "8:10",
+      "end": "9:40"
+    }
+  ]
+}
