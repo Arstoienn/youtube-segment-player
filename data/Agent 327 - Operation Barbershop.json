@@ -1,0 +1,16 @@
+{
+  "youtubeUrl": "https://www.youtube.com/watch?v=mN0zPOpADL4",
+  "date": "2017.05.15",
+  "clips": [
+    {
+      "title": "The barbershop",
+      "start": "0:25",
+      "end": "1:20"
+    },
+    {
+      "title": "The fight",
+      "start": "1:20",
+      "end": "2:40"
+    }
+  ]
+}

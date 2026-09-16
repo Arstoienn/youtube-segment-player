@@ -1,0 +1,31 @@
+{
+  "youtubeUrl": "https://www.youtube.com/watch?v=eRsGyueVLvQ",
+  "date": "2010.09.27",
+  "clips": [
+    {
+      "title": "Snow crossing",
+      "start": "0:40",
+      "end": "2:05"
+    },
+    {
+      "title": "The wounded hatchling",
+      "start": "3:20",
+      "end": "5:00"
+    },
+    {
+      "title": "Growing up together",
+      "start": "5:00",
+      "end": "6:20"
+    },
+    {
+      "title": "Into the mountain",
+      "start": "8:30",
+      "end": "10:00"
+    },
+    {
+      "title": "The reunion",
+      "start": "11:40",
+      "end": "13:30"
+    }
+  ]
+}

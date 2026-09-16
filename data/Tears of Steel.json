@@ -1,0 +1,26 @@
+{
+  "youtubeUrl": "https://www.youtube.com/watch?v=R6MlUcmOul8",
+  "date": "2012.09.26",
+  "clips": [
+    {
+      "title": "The rooftop argument",
+      "start": "0:45",
+      "end": "2:30"
+    },
+    {
+      "title": "Thirty years later",
+      "start": "3:15",
+      "end": "4:45"
+    },
+    {
+      "title": "Rebuilding the memory",
+      "start": "6:00",
+      "end": "7:40"
+    },
+    {
+      "title": "The machines arrive",
+      "start": "8:50",
+      "end": "10:30"
+    }
+  ]
+}

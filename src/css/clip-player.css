@@ -1,0 +1,669 @@
+/* ==========================================================================
+   youtube-segment-player — stylesheet
+   --------------------------------------------------------------------------
+   Everything is scoped under `.clip-*`, so this file can drop into an existing
+   page without colliding with its styles. The palette below is the only part
+   you normally need to touch: redefine any of these custom properties after
+   importing this file (or on the mount element) to re-theme the player.
+   ========================================================================== */
+
+:root {
+  --clip-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --clip-title-font: var(--clip-font);
+
+  /* Text */
+  --clip-text: rgba(255, 255, 255, 0.96);
+  --clip-text-soft: rgba(255, 255, 255, 0.76);
+  --clip-text-faint: rgba(255, 255, 255, 0.54);
+
+  /* Surfaces */
+  --clip-surface: #1b2430;          /* folder tree background */
+  --clip-surface-strong: #27374a;   /* selected clip row */
+  --clip-folder-row: #1b2430;       /* empty-state background */
+  --clip-hover: rgba(255, 255, 255, 0.08);
+  --clip-hairline: rgba(255, 255, 255, 0.14);
+
+  /* Transport buttons */
+  --clip-control-bg: #f4f7fa;
+  --clip-control-bg-hover: #ffffff;
+  --clip-control-ink: rgba(18, 28, 40, 0.92);
+  --clip-control-active-bg: #2f6f8f;
+  --clip-control-active-ink: #f2fbff;
+
+  /* Accent used by the Auto Next pill */
+  --clip-accent: #57c9e2;
+
+  --clip-soft-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+  --clip-soft-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.22);
+}
+
+.clip-player-shell {
+  display: grid;
+  grid-template-columns: minmax(230px, 340px) minmax(0, 680px);
+  justify-content: space-between;
+  align-items: start;
+  gap: clamp(20px, 3.5vw, 36px);
+  padding: clamp(16px, 2vw, 24px) 0 clamp(28px, 4vw, 44px);
+}
+
+.clip-now {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.clip-player-label {
+  margin: 0;
+  font-family: var(--clip-font);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--clip-text-faint);
+}
+
+.clip-player-title {
+  margin: 0;
+  font-family: var(--clip-title-font);
+  font-size: clamp(24px, 3.2vw, 38px);
+  line-height: 1.1;
+  font-weight: 500;
+  color: var(--clip-text);
+}
+
+.clip-player-artist,
+.clip-player-meta {
+  margin: 0;
+  color: var(--clip-text-soft);
+}
+
+.clip-player-artist {
+  font-size: 13.5px;
+}
+
+.clip-player-meta {
+  font-family: var(--clip-font);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--clip-text-faint);
+}
+
+.clip-flow-indicator {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: var(--clip-hover);
+  border: 1px solid var(--clip-hairline);
+  color: var(--clip-text-soft);
+  font-family: var(--clip-font);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.clip-flow-indicator[hidden] {
+  display: none;
+}
+
+.clip-flow-icon {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+  background: var(--clip-text-soft);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 2l4 4-4 4'/%3E%3Cpath d='M3 11V9a4 4 0 0 1 4-4h14'/%3E%3Cpath d='M7 22l-4-4 4-4'/%3E%3Cpath d='M21 13v2a4 4 0 0 1-4 4H3'/%3E%3C/svg%3E");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 2l4 4-4 4'/%3E%3Cpath d='M3 11V9a4 4 0 0 1 4-4h14'/%3E%3Cpath d='M7 22l-4-4 4-4'/%3E%3Cpath d='M21 13v2a4 4 0 0 1-4 4H3'/%3E%3C/svg%3E");
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+}
+
+/* ON: accent pill so "will auto-advance to the next clip" reads at a glance. */
+.clip-flow-indicator[data-mode="auto"] {
+  background: color-mix(in srgb, var(--clip-accent) 20%, transparent);
+  border-color: color-mix(in srgb, var(--clip-accent) 62%, transparent);
+  color: var(--clip-text);
+}
+
+.clip-flow-indicator[data-mode="auto"] .clip-flow-icon {
+  background: var(--clip-accent);
+}
+
+/* OFF: muted outline + a disabled (circle-slash) icon, distinct "Manual" label. */
+.clip-flow-indicator[data-mode="manual"] {
+  background: transparent;
+  border-color: var(--clip-hairline);
+  color: var(--clip-text-faint);
+}
+
+.clip-flow-indicator[data-mode="manual"] .clip-flow-icon {
+  background: var(--clip-text-faint);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M5.6 5.6l12.8 12.8'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M5.6 5.6l12.8 12.8'/%3E%3C/svg%3E");
+}
+
+.clip-transport {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  /* Exactly three 48px buttons + two 12px gaps, so the share button (4th)
+     wraps onto its own line below the prev/next/shuffle row. */
+  width: 168px;
+  margin-top: 22px;
+  padding-top: 0;
+}
+
+.clip-transport-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--clip-hairline);
+  border-radius: 999px;
+  background: var(--clip-control-bg);
+  color: var(--clip-control-ink);
+  cursor: pointer;
+  outline: 0;
+  box-shadow: var(--clip-soft-shadow-sm);
+  transition:
+    background 120ms ease,
+    color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    transform 120ms ease;
+}
+
+.clip-transport-button:hover:not(:disabled) {
+  background: var(--clip-control-bg-hover);
+  border-color: rgba(70, 120, 150, 0.3);
+  color: var(--clip-control-ink);
+  transform: translateY(-1px);
+}
+
+.clip-transport-button:focus-visible {
+  box-shadow: 0 0 0 3px rgba(120, 170, 200, 0.32);
+}
+
+/* Toggled-on state (shuffle). Use a fill that contrasts with BOTH the idle
+   button colour and your page background — a tint close to either one reads as
+   "no change" at a glance. */
+.clip-transport-button.is-active {
+  background: var(--clip-control-active-bg);
+  border-color: var(--clip-control-active-bg);
+  color: var(--clip-control-active-ink);
+}
+
+.clip-transport-button.is-active:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--clip-control-active-bg) 85%, white);
+  border-color: color-mix(in srgb, var(--clip-control-active-bg) 85%, white);
+  color: var(--clip-control-active-ink);
+  transform: translateY(-1px);
+}
+
+.clip-transport-button:disabled {
+  background: color-mix(in srgb, var(--clip-control-bg) 70%, var(--clip-surface));
+  border-color: var(--clip-hairline);
+  color: color-mix(in srgb, var(--clip-control-ink) 45%, transparent);
+  opacity: 0.8;
+  cursor: default;
+}
+
+.clip-transport-icon {
+  width: 21px;
+  height: 21px;
+  display: block;
+  background-color: currentColor;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+}
+
+.clip-transport-button--shuffle .clip-transport-icon {
+  width: 22px;
+  height: 22px;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m18 14 4 4-4 4'/%3E%3Cpath d='m18 2 4 4-4 4'/%3E%3Cpath d='M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22'/%3E%3Cpath d='M2 6h1.972a4 4 0 0 1 3.3 1.7l.9 1.4'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m18 14 4 4-4 4'/%3E%3Cpath d='m18 2 4 4-4 4'/%3E%3Cpath d='M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22'/%3E%3Cpath d='M2 6h1.972a4 4 0 0 1 3.3 1.7l.9 1.4'/%3E%3C/svg%3E");
+}
+
+.clip-transport-button--prev .clip-transport-icon {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 5V19' stroke='%23000' stroke-width='1.9' stroke-linecap='round'/%3E%3Cpath d='M17 6L10 12L17 18' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 5V19' stroke='%23000' stroke-width='1.9' stroke-linecap='round'/%3E%3Cpath d='M17 6L10 12L17 18' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.clip-transport-button--next .clip-transport-icon {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M17 5V19' stroke='%23000' stroke-width='1.9' stroke-linecap='round'/%3E%3Cpath d='M7 6L14 12L7 18' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M17 5V19' stroke='%23000' stroke-width='1.9' stroke-linecap='round'/%3E%3Cpath d='M7 6L14 12L7 18' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.clip-transport-button--share .clip-transport-icon {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
+}
+
+/* Brief "copied" confirmation: fill the button and float a tooltip above it.
+   player.js adds .is-share-flash for ~1.6s and sets data-share-message. */
+.clip-transport-button--share.is-share-flash {
+  background: var(--clip-control-active-bg);
+  border-color: var(--clip-control-active-bg);
+  color: var(--clip-control-active-ink);
+}
+
+.clip-transport-button--share.is-share-flash::after {
+  content: attr(data-share-message);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: var(--clip-control-active-bg);
+  color: var(--clip-control-active-ink);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: var(--clip-soft-shadow-sm);
+}
+
+.clip-preview-panel {
+  position: relative;
+  overflow: hidden;
+  width: min(100%, 680px);
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+  border-radius: 22px;
+  border: 1px solid var(--clip-hairline);
+  background: #000;
+  box-shadow: var(--clip-soft-shadow);
+  justify-self: end;
+  align-self: start;
+}
+
+.clip-player-mount,
+.clip-player-frame,
+.clip-player-mount iframe,
+.clip-player-mount > div {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+}
+
+.clip-player-mount {
+  z-index: 0;
+  background: #000;
+}
+
+.clip-player-poster {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  background: #000;
+  pointer-events: none;
+}
+
+.clip-player-poster[hidden] {
+  display: none;
+}
+
+.clip-library {
+  margin-top: clamp(32px, 5vw, 56px);
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 18px;
+  padding: 0 0 34px;
+}
+
+.clip-library-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 4px;
+}
+
+.clip-library-head h2 {
+  margin: 0;
+  font-family: var(--clip-title-font);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--clip-text);
+}
+
+.clip-library-head p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--clip-text-soft);
+}
+
+.clip-search {
+  display: flex;
+  flex: 0 0 auto;
+}
+
+.clip-search-input {
+  width: min(280px, 60vw);
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--clip-hairline);
+  background: var(--clip-hover);
+  color: var(--clip-text);
+  font: inherit;
+  font-size: 14px;
+  outline: 0;
+  transition: background 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.clip-search-input::placeholder {
+  color: var(--clip-text-faint);
+}
+
+.clip-search-input:focus-visible {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
+}
+
+.clip-search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  background: var(--clip-text-faint);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M18 6 6 18M6 6l12 12'/%3E%3C/svg%3E") center / contain no-repeat;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M18 6 6 18M6 6l12 12'/%3E%3C/svg%3E") center / contain no-repeat;
+  cursor: pointer;
+}
+
+.clip-tree,
+.clip-folder-children {
+  display: grid;
+  gap: 0;
+}
+
+.clip-tree {
+  min-height: 0;
+  align-content: start;
+  overflow: hidden;
+  padding: 8px 0;
+  gap: 4px;
+  background: var(--clip-surface);
+  border-radius: 16px;
+}
+
+.clip-tree > .clip-folder {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.clip-tree::-webkit-scrollbar {
+  width: 10px;
+}
+
+.clip-tree::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background: var(--clip-hairline);
+  background-clip: padding-box;
+}
+
+.clip-tree::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.clip-folder {
+  display: grid;
+  gap: 0;
+}
+
+.clip-folder-children {
+  overflow: hidden;
+  will-change: clip-path, opacity;
+  contain: layout paint;
+  margin-left: clamp(14px, 2vw, 22px);
+  padding-left: 0;
+  padding-bottom: 3px;
+  border-left: 0;
+}
+
+.clip-folder-row,
+.clip-file-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--clip-text);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  transition:
+    background 140ms ease,
+    color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.clip-folder-row {
+  min-height: 34px;
+  padding: 5px 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.clip-file-row {
+  min-height: 34px;
+  margin: 1px 10px;
+  padding: 4px 14px;
+  width: auto;
+  font-size: 13.5px;
+  color: var(--clip-text-soft);
+}
+
+.clip-folder-row[data-depth="0"] {
+  min-height: 48px;
+  padding: 10px 22px;
+  border-radius: 0;
+  font-family: var(--clip-title-font);
+  font-size: clamp(18px, 2vw, 24px);
+  letter-spacing: 0.04em;
+}
+
+.clip-folder-row[data-depth="1"] {
+  margin: 1px 10px;
+  width: auto;
+  color: var(--clip-text);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+.clip-folder-row:hover,
+.clip-file-row:hover {
+  background: var(--clip-hover);
+  color: var(--clip-text);
+}
+
+.clip-file-row.is-active {
+  background: var(--clip-surface-strong);
+  box-shadow: var(--clip-soft-shadow-sm);
+  color: var(--clip-text);
+}
+
+.clip-file-row.is-active:hover {
+  background: var(--clip-surface-strong);
+  color: var(--clip-text);
+}
+
+.clip-file-row.is-active .clip-file-label {
+  color: var(--clip-text);
+  font-weight: 600;
+}
+
+.clip-folder-row.has-active-descendant:not([aria-expanded="true"]) {
+  background: var(--clip-hover);
+  box-shadow: none;
+}
+
+.clip-folder-caret {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  background: var(--clip-text-soft);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E");
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  transform: rotate(0deg);
+  transition: transform 140ms ease;
+}
+
+.clip-folder-row[aria-expanded="true"] .clip-folder-caret {
+  transform: rotate(90deg);
+}
+
+.clip-folder-icon {
+  width: 22px;
+  height: 18px;
+  flex: 0 0 auto;
+  background: var(--clip-text-soft);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 20' fill='%23000'%3E%3Cpath d='M1 4a2 2 0 0 1 2-2h5.2l2.1 2.4H21a2 2 0 0 1 2 2V16a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2z'/%3E%3C/svg%3E");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 20' fill='%23000'%3E%3Cpath d='M1 4a2 2 0 0 1 2-2h5.2l2.1 2.4H21a2 2 0 0 1 2 2V16a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2z'/%3E%3C/svg%3E");
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+}
+
+.clip-folder-row[data-depth="0"] .clip-folder-icon {
+  width: 26px;
+  height: 21px;
+  background: var(--clip-text);
+}
+
+.clip-folder-row[data-depth="1"] .clip-folder-caret {
+  width: 12px;
+  height: 12px;
+}
+
+.clip-folder-row[data-depth="1"] .clip-folder-icon {
+  width: 18px;
+  height: 15px;
+  background: var(--clip-text-faint);
+}
+
+.clip-folder-label,
+.clip-file-label {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.clip-file-thumb {
+  width: 34px;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  flex: 0 0 auto;
+  border-radius: 6px;
+  object-fit: cover;
+  object-position: center;
+  background: #d9e0e6;
+  box-shadow: inset 0 0 0 1px rgba(8, 56, 72, 0.12);
+}
+
+.clip-file-icon {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  background: var(--clip-text-faint);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linejoin='round'%3E%3Cpath d='M6 2.5h8l5 5v14H6z'/%3E%3Cpath d='M14 2.5v5h5'/%3E%3C/svg%3E");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linejoin='round'%3E%3Cpath d='M6 2.5h8l5 5v14H6z'/%3E%3Cpath d='M14 2.5v5h5'/%3E%3C/svg%3E");
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+}
+
+.clip-file-row.is-active .clip-file-thumb,
+.clip-file-row.is-active .clip-file-icon {
+  box-shadow: inset 0 0 0 1px rgba(8, 56, 72, 0.18);
+}
+
+.clip-tree-empty {
+  padding: 18px 14px;
+  border-radius: 8px;
+  background: var(--clip-folder-row);
+  color: var(--clip-text-soft);
+}
+
+@media (max-width: 720px) {
+  .clip-player-shell {
+    grid-template-columns: 1fr;
+    padding: 12px 0 22px;
+  }
+
+  .clip-preview-panel {
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .clip-library-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .clip-search,
+  .clip-search-input {
+    width: 100%;
+  }
+
+  .clip-folder-children {
+    margin-left: 14px;
+    padding-left: 0;
+  }
+
+  .clip-folder-row {
+    font-size: 14.5px;
+  }
+
+  .clip-file-row {
+    font-size: 13px;
+  }
+
+  .clip-folder-row[data-depth="0"] {
+    min-height: 52px;
+    font-size: 19px;
+  }
+}

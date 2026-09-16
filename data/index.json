@@ -1,0 +1,22 @@
+{
+  "folders": [
+    {
+      "label": "Feature films",
+      "files": [
+        "Elephants Dream.json",
+        "Big Buck Bunny.json",
+        "Sintel.json",
+        "Tears of Steel.json"
+      ]
+    },
+    {
+      "label": "Shorts",
+      "files": [
+        "Cosmos Laundromat.json",
+        "Caminandes 3 - Llamigos.json",
+        "Agent 327 - Operation Barbershop.json",
+        "Spring.json"
+      ]
+    }
+  ]
+}
