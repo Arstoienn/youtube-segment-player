@@ -108,6 +108,26 @@ redefine any of them after importing to re-theme. Markup is scoped under
 
 ---
 
+## Tests
+
+```bash
+npm test
+```
+
+Node's own test runner, no dependencies to install — the `devDependencies` are
+empty and stay that way. The tests cover the parts an archive is written
+against: the timecode, URL and date parsing, the config merge a host page
+re-themes through, and loading a folder of JSON into the model, including what
+happens when a file is missing, empty or malformed.
+
+They run the player's sources unmodified, in a `vm` context holding the globals
+a browser would have provided (`test/harness.js`). The scripts stay classic
+scripts loaded with `<script src>`, which is what lets this be embedded with no
+build step and opened straight off the disk; a test suite is not a reason to
+give that up.
+
+---
+
 ## Notes
 
 In the code and data, a segment is called a **clip** — `ClipPlayer.mount()`,

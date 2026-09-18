@@ -1,0 +1,20 @@
+{
+  "name": "youtube-segment-player",
+  "version": "1.0.0",
+  "description": "Play start/end segments of long YouTube videos as a playlist. No dependencies, no build step.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Arstoienn/youtube-segment-player.git"
+  },
+  "homepage": "https://arstoienn.github.io/youtube-segment-player/",
+  "keywords": ["youtube", "playlist", "clips", "segments", "player", "no-build"],
+  "files": ["index.html", "src", "data", "docs", "README.md", "LICENSE"],
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {}
+}
